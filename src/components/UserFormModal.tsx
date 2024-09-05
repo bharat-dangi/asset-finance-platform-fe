@@ -13,10 +13,13 @@ const UserFormModal: React.FC<{ onClose: () => void; onFormSubmit: () => void }>
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check if all fields are filled
     if (!name || !age || !address) {
-      alert("All fields are required");
+      alert("Please fill in all fields.");
       return;
     }
+
     const newUser: Omit<User, "_id"> = { name, age: Number(age), address };
     try {
       const createdUser = await createUser(newUser);
@@ -39,7 +42,7 @@ const UserFormModal: React.FC<{ onClose: () => void; onFormSubmit: () => void }>
           {/* Name input */}
           <div>
             <label className="block text-gray-700 font-medium mb-2" htmlFor="name">
-              Name
+              Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -54,7 +57,7 @@ const UserFormModal: React.FC<{ onClose: () => void; onFormSubmit: () => void }>
           {/* Age input */}
           <div>
             <label className="block text-gray-700 font-medium mb-2" htmlFor="age">
-              Age
+              Age <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
@@ -69,7 +72,7 @@ const UserFormModal: React.FC<{ onClose: () => void; onFormSubmit: () => void }>
           {/* Address input */}
           <div>
             <label className="block text-gray-700 font-medium mb-2" htmlFor="address">
-              Address
+              Address <span className="text-red-500">*</span>
             </label>
             <input
               type="text"

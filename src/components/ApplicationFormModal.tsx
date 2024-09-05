@@ -11,10 +11,10 @@ const ApplicationFormModal: React.FC<{ onClose: () => void; onFormSubmit: () => 
   onClose,
   onFormSubmit,
 }) => {
-  const [income, setIncome] = useState<number>(0);
-  const [expenses, setExpenses] = useState<number>(0);
-  const [assets, setAssets] = useState<number>(0);
-  const [liabilities, setLiabilities] = useState<number>(0);
+  const [income, setIncome] = useState<string>(""); // Changed from number to string
+  const [expenses, setExpenses] = useState<string>(""); // Changed from number to string
+  const [assets, setAssets] = useState<string>(""); // Changed from number to string
+  const [liabilities, setLiabilities] = useState<string>(""); // Changed from number to string
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<string>("");
 
@@ -34,13 +34,21 @@ const ApplicationFormModal: React.FC<{ onClose: () => void; onFormSubmit: () => 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Ensure all fields are filled
+    if (!selectedUser || !income || !expenses || !assets || !liabilities) {
+      alert("Please fill in all fields");
+      return;
+    }
+
     const newApplication: Omit<Application, "_id"> = {
       userId: selectedUser,
-      income,
-      expenses,
-      assets,
-      liabilities,
+      income: Number(income),
+      expenses: Number(expenses),
+      assets: Number(assets),
+      liabilities: Number(liabilities),
     };
+
     try {
       const createdApp = await createApplication(newApplication);
       console.log("Application created:", createdApp);
@@ -62,13 +70,14 @@ const ApplicationFormModal: React.FC<{ onClose: () => void; onFormSubmit: () => 
           {/* User dropdown */}
           <div>
             <label className="block text-gray-700 font-medium mb-2" htmlFor="user">
-              User
+              User <span className="text-red-500">*</span>
             </label>
             <select
               id="user"
               value={selectedUser}
               onChange={(e) => setSelectedUser(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500"
+              required
             >
               <option value="" disabled>
                 Select a user
@@ -84,56 +93,60 @@ const ApplicationFormModal: React.FC<{ onClose: () => void; onFormSubmit: () => 
           {/* Income input */}
           <div>
             <label className="block text-gray-700 font-medium mb-2" htmlFor="income">
-              Income
+              Income <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
               id="income"
               value={income}
-              onChange={(e) => setIncome(Number(e.target.value))}
+              onChange={(e) => setIncome(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500"
+              required
             />
           </div>
 
           {/* Expenses input */}
           <div>
             <label className="block text-gray-700 font-medium mb-2" htmlFor="expenses">
-              Expenses
+              Expenses <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
               id="expenses"
               value={expenses}
-              onChange={(e) => setExpenses(Number(e.target.value))}
+              onChange={(e) => setExpenses(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500"
+              required
             />
           </div>
 
           {/* Assets input */}
           <div>
             <label className="block text-gray-700 font-medium mb-2" htmlFor="assets">
-              Assets
+              Assets <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
               id="assets"
               value={assets}
-              onChange={(e) => setAssets(Number(e.target.value))}
+              onChange={(e) => setAssets(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500"
+              required
             />
           </div>
 
           {/* Liabilities input */}
           <div>
             <label className="block text-gray-700 font-medium mb-2" htmlFor="liabilities">
-              Liabilities
+              Liabilities <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
               id="liabilities"
               value={liabilities}
-              onChange={(e) => setLiabilities(Number(e.target.value))}
+              onChange={(e) => setLiabilities(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500"
+              required
             />
           </div>
 
