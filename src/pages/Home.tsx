@@ -8,10 +8,11 @@ import ApplicationList from "../components/ApplicationList";
  */
 const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shouldRefresh, setShouldRefresh] = useState(true); // State to trigger refresh
 
   const handleFormSubmit = () => {
-    // Logic after form submission (e.g., fetch updated list)
-    setIsModalOpen(false);
+    setShouldRefresh(true); // Set to true to indicate a refresh is needed
+    setIsModalOpen(false); // Close the modal
   };
 
   return (
@@ -25,7 +26,7 @@ const Home: React.FC = () => {
           Add New Application
         </button>
       </div>
-      <ApplicationList />
+      <ApplicationList shouldRefresh={shouldRefresh} setShouldRefresh={setShouldRefresh} />
 
       {isModalOpen && <ApplicationFormModal onClose={() => setIsModalOpen(false)} onFormSubmit={handleFormSubmit} />}
     </div>

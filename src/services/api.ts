@@ -53,7 +53,7 @@ export const createApplication = async (application: Omit<Application, "_id">): 
  * @returns {Promise<void>} Confirmation of deletion.
  */
 export const deleteApplication = async (applicationId: string): Promise<void> => {
-  await axios.delete(`${API_URL}/v1/application`, { params: { _id: applicationId } });
+  await axios.delete(`${API_URL}/v1/application/delete-one-application`, { params: { _id: applicationId } });
 };
 
 /**
