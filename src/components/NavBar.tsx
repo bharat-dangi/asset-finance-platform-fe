@@ -1,30 +1,30 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 /**
  * @component Navbar
- * @description Navigation bar component for the application.
+ * @description Navigation bar component.
  */
 const Navbar: React.FC = () => {
   return (
-    <nav className="bg-blue-600 text-white py-4">
-      <div className="container mx-auto flex justify-between items-center px-4">
-        <Link to="/" className="text-2xl font-bold">
+    <nav className="bg-blue-600 text-white p-4">
+      <div className="container mx-auto flex justify-between">
+        <NavLink to="/" className="font-bold text-xl">
           Asset Finance
-        </Link>
-        <div className="space-x-4">
-          <Link to="/" className="hover:bg-blue-700 px-3 py-2 rounded">
+        </NavLink>
+        <div>
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? "mr-4 text-yellow-300 font-semibold" : "mr-4 hover:text-gray-300")}
+          >
             Home
-          </Link>
-          <Link to="/add-application" className="hover:bg-blue-700 px-3 py-2 rounded">
-            Add Application
-          </Link>
-          <Link to="/add-user" className="hover:bg-blue-700 px-3 py-2 rounded">
-            Add User
-          </Link>
-          <Link to="/user-list" className="hover:bg-blue-700 px-3 py-2 rounded">
+          </NavLink>
+          <NavLink
+            to="/user-list"
+            className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-gray-300")}
+          >
             User List
-          </Link>
+          </NavLink>
         </div>
       </div>
     </nav>
