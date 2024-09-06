@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getApplications, getUsers, deleteApplication } from "../services/api";
 import { PopulatedApplication } from "../types/Application";
 import EditApplicationModal from "../components/EditApplicationModal";
@@ -18,21 +18,11 @@ const ApplicationList: React.FC<{
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false); // Added loading state
 
-  useEffect(() => {
-    if (shouldRefresh && !loading) {
-      fetchApplications();
-    }
-  }, [shouldRefresh]); // Fetch applications on load or when shouldRefresh changes
-
-  useEffect(() => {
-    fetchUsers(); // Fetch users when the component mounts
-  }, []);
-
-  const fetchApplications = async () => {
+  // Use useCallback to memoize fetchApplications
+  const fetchApplications = useCallback(async () => {
     setLoading(true); // Set loading to true before fetching data
     try {
       const apps = await getApplications();
-      console.log("Fetched applications:", apps); // Debug: log fetched applications
       setApplications(apps);
       setLoading(false); // Set loading to false after data is fetched
       setShouldRefresh(false); // Reset refresh flag after fetching data
@@ -40,7 +30,17 @@ const ApplicationList: React.FC<{
       console.error("Error fetching applications:", error);
       setLoading(false); // Ensure loading is set to false if there's an error
     }
-  };
+  }, [setShouldRefresh]); // Empty dependency array, as no external dependencies are used
+
+  useEffect(() => {
+    if (shouldRefresh && !loading) {
+      fetchApplications();
+    }
+  }, [shouldRefresh, loading, fetchApplications]); // Fetch applications on load or when shouldRefresh changes
+
+  useEffect(() => {
+    fetchUsers(); // Fetch users when the component mounts
+  }, []);
 
   const fetchUsers = async () => {
     try {
