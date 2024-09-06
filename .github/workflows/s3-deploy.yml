@@ -3,14 +3,14 @@ name: Deploy to AWS S3 and CloudFront
 on:
   push:
     branches:
-      - master # Trigger on push to master branch
+      - master  # Trigger on push to master branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code from the repository
+      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -40,12 +40,12 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           SOURCE_DIR: "build"
 
-      # Step 6: Invalidate CloudFront cache using AWS official action
+      # Step 6: Invalidate CloudFront cache
       - name: Invalidate CloudFront Cache
-        uses: aws-actions/aws-cloudfront-invalidate-cache-action@v1
-        with:
-          distribution-id: ${{ secrets.DISTRIBUTION_ID }}
-          paths: "/*"
+        uses: chetan/invalidate-cloudfront-action@v2
         env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+          PATHS: "/*"
+          AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
