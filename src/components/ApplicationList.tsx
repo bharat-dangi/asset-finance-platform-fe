@@ -26,7 +26,7 @@ const ApplicationList: React.FC<{
 
   useEffect(() => {
     fetchUsers(); // Fetch users when the component mounts
-  });
+  }, []);
 
   const fetchApplications = async () => {
     setLoading(true); // Set loading to true before fetching data
